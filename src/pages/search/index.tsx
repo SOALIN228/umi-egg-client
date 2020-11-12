@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { SearchBar, ActivityIndicator } from 'antd-mobile';
 import useHttpHook from '@/hooks/useHttpHook';
 import useObserverHook from '@/hooks/useObserverHook';
+import useImgHook from '@/hooks/useImgHook';
 import { useLocation } from 'umi';
 import './index.less';
 
@@ -48,6 +49,7 @@ const Search: React.FC<{}> = (props) => {
       });
     }
   });
+  useImgHook('.item-img');
 
   useEffect(() => {
     if (!loading && houses) {
@@ -97,7 +99,7 @@ const Search: React.FC<{}> = (props) => {
         : <div className='result'>
           {houseLists.map(item => (
             <div className='item' key={item.id + Math.random()}>
-              <img alt='img' className='item-img' src={item.img} data-src={item.img}/>
+              <img alt='img' className='item-img' src={require('../../assets/blank.png')} data-src={item.img}/>
               <div className='item-right'>
                 <div className='title'>{item.title}</div>
                 <div className='price'>{item.price}</div>
