@@ -15,7 +15,7 @@ export interface HouseItem {
 }
 
 interface IProps {
-  houses: HouseItem[]
+  houses?: HouseItem[]
 }
 
 const Hot: React.FC<IProps> = (props) => {
@@ -30,7 +30,7 @@ const Hot: React.FC<IProps> = (props) => {
     <div className={'hot'}>
       <h1>最热民宿</h1>
       <div className={'hot-lists'}>
-        {props.houses.map(item => (
+        {props.houses?.map(item => (
           <div className='hot-lists-item' key={item.id} onClick={() => handleClick(item.id)}>
             <img className='img' alt='img' src={item.img}/>
             <div className='title'>{item.title}</div>
@@ -41,10 +41,6 @@ const Hot: React.FC<IProps> = (props) => {
       </div>
     </div>
   );
-};
-
-Hot.defaultProps = {
-  houses: [],
 };
 
 export default Hot;

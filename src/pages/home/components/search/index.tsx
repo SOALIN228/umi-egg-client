@@ -5,8 +5,9 @@
  * Desc:
  */
 import React, { useEffect, useState } from 'react';
-import { Picker, List, Calendar, Button } from 'antd-mobile';
+import { Picker, List, Calendar, Button, Toast } from 'antd-mobile';
 import dayjs from 'dayjs';
+import { history } from 'umi';
 
 export interface ICityItem {
   value: string | number;
@@ -14,7 +15,7 @@ export interface ICityItem {
 }
 
 interface IProps {
-  citys: ICityItem[][];
+  citys?: ICityItem[][];
   citysLoading?: boolean
 }
 
@@ -36,6 +37,18 @@ const Search: React.FC<IProps> = (props) => {
     setTimes(dayjs(startDateTime).format('YYYY-MM-DD') + '~' + dayjs(endDateTime).format('YYYY-MM-DD'));
   };
   const handleClick = () => {
+    if (times.includes('~')) {
+      history.push({
+        pathname: '/search',
+        query: {
+          code: selectedCity,
+          startTime: times.split('~')[0],
+          endTime: times.split('~')[1],
+        },
+      });
+    } else {
+      Toast.fail('请选择时间');
+    }
   };
 
   useEffect(() => {
@@ -44,7 +57,7 @@ const Search: React.FC<IProps> = (props) => {
     <div className={'search'}>
       <div className="search-addr">
         {!props.citysLoading && (
-          <Picker data={props.citys} title={'城市'}
+          <Picker data={(props.citys || [])} title={'城市'}
                   value={selectedCity}
                   cascade={false}
                   cols={1}
@@ -65,10 +78,6 @@ const Search: React.FC<IProps> = (props) => {
       />
     </div>
   );
-};
-
-Search.defaultProps = {
-  citys: [],
 };
 
 export default Search;

@@ -15,10 +15,12 @@ const Home: React.FC<{}> = (props) => {
   const [citys, citysLoading] = useHttpHook<ICityItem[][]>({
     url: '/commons/citys',
     method: 'post',
+    watch: [],
   });
   const [houses] = useHttpHook<HouseItem[]>({
     url: '/house/hot',
     method: 'post',
+    watch: [],
   });
 
   useEffect(() => {
@@ -26,8 +28,8 @@ const Home: React.FC<{}> = (props) => {
   return (
     <div className={'home'}>
       <Header/>
-      {citys && <Search citys={citys} citysLoading={citysLoading}/>}
-      {houses && <Hot houses={houses}/>}
+      <Search citys={citys} citysLoading={citysLoading}/>
+      <Hot houses={houses}/>
     </div>
   );
 };

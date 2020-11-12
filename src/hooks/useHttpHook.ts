@@ -14,7 +14,7 @@ interface Options {
   method?: string,
   headers?: object,
   body?: object,
-  watch?: string[]
+  watch?: (string | number)[]
 }
 
 export default function useHttpHook<T> (
@@ -23,7 +23,7 @@ export default function useHttpHook<T> (
     method = 'get',
     headers,
     body = {},
-    watch = [],
+    watch,
   }: Options): [T | undefined, boolean] {
   const [result, setResult] = useState();
   const [loading, setLoading] = useState(true);

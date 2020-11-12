@@ -22,6 +22,11 @@ export default defineConfig({
           path: '/user',
           component: './user/index',
           title: '我的',
+        },
+        {
+          path: '/search',
+          component: './search/index',
+          title: '搜索',
         }],
     },
   ],
