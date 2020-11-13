@@ -7,7 +7,7 @@
 import { useEffect } from 'react';
 
 let observer: IntersectionObserver;
-export default function useObserverHook (ele: string, callback: (entries: any) => void, watch?: (string | number)[]) {
+export default function useObserverHook (ele: string, callback: (entries: any) => void, watch?: (string | number | boolean)[]) {
   useEffect(() => {
     const node = document.querySelector(ele);
     if (node) {

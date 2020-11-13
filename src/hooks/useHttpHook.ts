@@ -7,7 +7,6 @@
 
 import { useState, useEffect } from 'react';
 import http from '@/utils/http';
-import ex from 'umi/dist';
 
 interface Options {
   url: string

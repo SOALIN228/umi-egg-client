@@ -5,12 +5,13 @@
  * Desc:
  */
 import { useEffect } from 'react';
+import { isEmpty } from 'lodash';
 
 let observer: IntersectionObserver;
 export default function useImgHook (ele: string, callback?: (entries: any) => void, watch?: (string | number)[]) {
   useEffect(() => {
     const nodes = document.querySelectorAll(ele);
-    if (nodes && nodes.length) {
+    if (!isEmpty(nodes)) {
       observer = new IntersectionObserver((entries) => {
         callback && callback(entries);
         entries.forEach(item => {
@@ -27,7 +28,7 @@ export default function useImgHook (ele: string, callback?: (entries: any) => vo
       });
     }
     return () => {
-      if (nodes && nodes.length && observer) {
+      if (!isEmpty(nodes) && observer) {
         observer.disconnect();
       }
     };

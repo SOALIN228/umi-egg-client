@@ -6,9 +6,12 @@
  */
 import React, { useEffect, useState } from 'react';
 import { SearchBar, ActivityIndicator } from 'antd-mobile';
+import ShowLoading from '@/components/ShowLoading';
 import useHttpHook from '@/hooks/useHttpHook';
 import useObserverHook from '@/hooks/useObserverHook';
 import useImgHook from '@/hooks/useImgHook';
+import useCallbackState from '@/hooks/useStateCallback';
+import { CommonEnum } from '@/enums';
 import { useLocation } from 'umi';
 import './index.less';
 
@@ -22,13 +25,11 @@ interface HouseItem {
 const Search: React.FC<{}> = (props) => {
   const { query }: any = useLocation();
   const [houseName, setHouseName] = useState('');
-  const [houseLists, setHouseLists] = useState<HouseItem[]>([]);
+  const [houseLists, setHouseLists] = useCallbackState<HouseItem[]>([]);
   const [showLoading, setShowLoading] = useState(true);
+  const [showNext, setShowNext] = useState(false);
   const [houseSubmitName, setHouseSubmitName] = useState('');
-  const [page, setPage] = useState({
-    pageSize: 8,
-    pageNum: 1,
-  });
+  const [page, setPage] = useState(CommonEnum.PAGE);
   const [houses, loading] = useHttpHook<HouseItem[]>({
     url: '/house/search',
     method: 'post',
@@ -41,20 +42,31 @@ const Search: React.FC<{}> = (props) => {
     },
     watch: [page.pageNum, houseSubmitName],
   });
-  useObserverHook('#loading', (entries: IntersectionObserverEntry[]) => {
-    if (!loading && entries[0].isIntersecting) {
+  useObserverHook(`#${CommonEnum.LOADING_ID}`, (entries: IntersectionObserverEntry[]) => {
+    if (!loading && showNext !== entries[0].isIntersecting) {
+      setShowNext(entries[0].isIntersecting);
+    }
+  });
+  useEffect(() => {
+    if (showNext) {
       setPage({
         ...page,
         pageNum: page.pageNum + 1,
       });
     }
-  });
+  }, [showNext]);
   useImgHook('.item-img');
 
   useEffect(() => {
     if (!loading && houses) {
       if (houses.length) {
-        setHouseLists([...houseLists, ...houses]);
+        // 记录滚动位置
+        const currentScrollTop =
+          document.body.scrollTop + document.documentElement.scrollTop;
+        // 加载新数据后滚动到加载前的位置
+        setHouseLists([...houseLists, ...houses], () => {
+          scrollTo(0, currentScrollTop);
+        });
         if (houses.length < page.pageSize) {
           setShowLoading(false);
         }
@@ -67,10 +79,7 @@ const Search: React.FC<{}> = (props) => {
   const _handleSubmit = (value: string) => {
     setHouseName(value);
     setHouseSubmitName(value);
-    setPage({
-      pageSize: 8,
-      pageNum: 1,
-    });
+    setPage(CommonEnum.PAGE);
     setHouseLists([]);
   };
 
@@ -106,7 +115,7 @@ const Search: React.FC<{}> = (props) => {
               </div>
             </div>
           ))}
-          {showLoading ? <div id={'loading'}>loading</div> : <div>null</div>}
+          <ShowLoading showLoading={showLoading}/>
         </div>
       }
     </div>
