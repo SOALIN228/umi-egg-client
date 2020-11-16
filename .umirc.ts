@@ -8,11 +8,12 @@ export default defineConfig({
     {
       path: '/',
       component: '@/layouts/index',
-      routes: [{
-        path: '/',
-        component: './home/index',
-        title: '首页',
-      },
+      routes: [
+        {
+          path: '/',
+          component: './home/index',
+          title: '首页',
+        },
         {
           path: '/order',
           component: './order/index',
@@ -27,7 +28,13 @@ export default defineConfig({
           path: '/search',
           component: './search/index',
           title: '搜索',
-        }],
+        },
+        {
+          path: '/house',
+          component: './house/index',
+          title: '房屋详情',
+        },
+      ],
     },
   ],
 });

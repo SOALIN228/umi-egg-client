@@ -7,23 +7,22 @@
 import { Toast } from 'antd-mobile';
 
 interface Options {
-  url: string
-  method?: string,
-  headers?: object,
-  body?: object,
-  setLoading?: (loading: boolean) => void,
-  setResult?: (data: any) => void,
+  url: string;
+  method?: string;
+  headers?: object;
+  body?: object;
+  setLoading?: (loading: boolean) => void;
+  setResult?: (data: any) => void;
 }
 
-const http = (
-  {
-    url,
-    method = 'get',
-    headers,
-    body = {},
-    setLoading,
-    setResult,
-  }: Options) => {
+export default function http<T>({
+  url,
+  method = 'get',
+  headers,
+  body = {},
+  setLoading,
+  setResult,
+}: Options) {
   setLoading && setLoading(true);
   const defaultHeader: object = {
     'Content-type': 'application/json',
@@ -43,26 +42,26 @@ const http = (
     };
   }
 
-  return new Promise((resolve, reject) => {
-    fetch('/api' + url, params)
-      .then(res => res.json())
-      .then(res => {
-        if (res.status === 200) {
-          resolve(res.data);
-          setResult && setResult(res.data);
-        } else {
-          Toast.fail(res.errMsg);
-          reject(res.errMsg);
-        }
-      })
-      .catch(err => {
-        Toast.fail(err);
-        reject(err);
-      })
-      .finally(() => {
-        setLoading && setLoading(false);
-      });
-  });
-};
-
-export default http;
+  return new Promise(
+    (resolve: (value: T) => void, reject: (value: string | object) => void) => {
+      fetch('/api' + url, params)
+        .then(res => res.json())
+        .then(res => {
+          if (res.status === 200) {
+            resolve(res.data);
+            setResult && setResult(res.data);
+          } else {
+            Toast.fail(res.errMsg);
+            reject(res.errMsg);
+          }
+        })
+        .catch(err => {
+          Toast.fail(err.toString());
+          reject(err);
+        })
+        .finally(() => {
+          setLoading && setLoading(false);
+        });
+    },
+  );
+}
