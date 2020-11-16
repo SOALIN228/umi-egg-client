@@ -6,17 +6,17 @@
  */
 import { useEffect, useState, useRef } from 'react';
 
-export default function useStateCallback<T> (
-  data: T,
-): [T, (value: T, cb?: () => void) => void] {
+type CBType = () => void;
 
+export default function useStateCallback<T>(
+  data: T,
+): [T, (value: T, cb?: CBType) => void] {
   const [state, setState] = useState<T>(data);
 
-  const cbRef = useRef(null);
+  const cbRef: any = useRef(null);
 
-  function setStateAndCallback (value: T, cb?: () => void) {
+  function setStateAndCallback(value: T, cb: CBType = () => {}) {
     cbRef.current = cb;
-
     setState(value);
   }
 

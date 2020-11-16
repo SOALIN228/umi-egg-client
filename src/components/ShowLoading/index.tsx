@@ -36,8 +36,4 @@ const ShowLoading: React.FC<IProps> = props => {
   );
 };
 
-ShowLoading.defaultProps = {
-  showLoading: true,
-};
-
 export default ShowLoading;

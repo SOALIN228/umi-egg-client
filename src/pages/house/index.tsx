@@ -30,6 +30,7 @@ const mapDispatch = (dispatch: Dispatch) => ({
   getCommentsAsync: (payload?: object) =>
     dispatch.house.getCommentsAsync(payload),
   reloadComments: () => dispatch.house.reloadComments(),
+  resetData: (payload: object = {}) => dispatch.house.resetData(payload),
 });
 
 type StateProps = ReturnType<typeof mapState>;
@@ -54,9 +55,10 @@ const House: React.FC<Props> = props => {
     '#' + CommonEnum.LOADING_ID,
     entries => {
       if (
-        (props.comments.length || props.reset) &&
-        props.showLoading &&
-        entries[0]?.isIntersecting
+        (props.showLoading &&
+          entries[0]?.isIntersecting &&
+          props.comments.length) ||
+        props.reset
       ) {
         props.reloadComments();
       }
@@ -64,15 +66,25 @@ const House: React.FC<Props> = props => {
     [props.comments.length, props.showLoading],
   );
 
+  useEffect(() => {
+    return () => {
+      props.resetData({
+        detail: {},
+      });
+    };
+  }, []);
+
   return (
     <div className="house-page">
       <Banner banner={props.detail.banner} />
       <Info info={props.detail.info} />
       <List list={props.comments} />
-      <ShowLoading
-        showLoading={props.showLoading}
-        style={{ marginBottom: 50 }}
-      />
+      {props.comments.length ? (
+        <ShowLoading
+          showLoading={props.showLoading}
+          style={{ marginBottom: 50 }}
+        />
+      ) : null}
       <Footer />
     </div>
   );

@@ -80,7 +80,7 @@ export const house = createModel<RootModel>()({
         reset: false,
       };
     },
-    resetData(state, payload) {
+    resetData(state, payload: object) {
       return {
         ...state,
         comments: [],
