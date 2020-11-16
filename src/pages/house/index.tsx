@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import { RootState, Dispatch } from '@/store';
 import { useLocation } from 'umi';
 import './index.less';
+import ShowLoading from '@/components/ShowLoading';
 
 const mapState = (state: RootState) => ({
   detail: state.house.detail,
@@ -52,30 +53,26 @@ const House: React.FC<Props> = props => {
   useObserverHook(
     '#' + CommonEnum.LOADING_ID,
     entries => {
-      console.log(
-        'cb2',
-        entries[0].isIntersecting,
-        props.showLoading,
-        props.comments.length,
-      );
       if (
         (props.comments.length || props.reset) &&
         props.showLoading &&
         entries[0]?.isIntersecting
       ) {
-        console.log('props.reloadCommentsNum', props.reloadCommentsNum);
         props.reloadComments();
       }
     },
     [props.comments.length, props.showLoading],
   );
 
-  console.log('rr');
   return (
     <div className="house-page">
       <Banner banner={props.detail.banner} />
       <Info info={props.detail.info} />
-      <List list={props.comments} showLoading={props.showLoading} />
+      <List list={props.comments} />
+      <ShowLoading
+        showLoading={props.showLoading}
+        style={{ marginBottom: 50 }}
+      />
       <Footer />
     </div>
   );

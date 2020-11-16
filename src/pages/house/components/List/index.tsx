@@ -5,13 +5,11 @@
  * Desc:
  */
 import React, { useEffect } from 'react';
-import ShowLoading from '@/components/ShowLoading';
 import { IComment } from '@/store/house';
 import timer from '@/utils/timer';
 
 interface IProps {
   list?: IComment[];
-  showLoading: boolean;
 }
 
 const List: React.FC<IProps> = props => {
@@ -32,7 +30,6 @@ const List: React.FC<IProps> = props => {
             </div>
           </div>
         ))}
-        <ShowLoading showLoading={props.showLoading} />
       </div>
     </div>
   );

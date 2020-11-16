@@ -13,21 +13,16 @@ export default function useObserverHook(
   watch?: (string | number | boolean | object)[],
 ) {
   useEffect(() => {
-    console.log('use');
     const node = document.querySelector(ele);
     if (node) {
       observer = new IntersectionObserver(entries => {
-        console.log('cb1');
         callback && callback(entries);
       });
       observer.observe(node);
     }
 
     return () => {
-      console.log('observer', observer);
-      console.log('node', node);
       if (observer && node) {
-        console.log('remover remove');
         // 解绑元素
         observer.unobserve(node);
         // 停止监听
