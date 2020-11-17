@@ -9,13 +9,13 @@ import Banner from '@/pages/house/components/Banner';
 import Info from '@/pages/house/components/Info';
 import List from '@/pages/house/components/List';
 import Footer from '@/pages/house/components/Footer';
+import ShowLoading from '@/components/ShowLoading';
 import useObserverHook from '@/hooks/useObserverHook';
 import { CommonEnum } from '@/enums';
 import { connect } from 'react-redux';
 import { RootState, Dispatch } from '@/store';
 import { useLocation } from 'umi';
 import './index.less';
-import ShowLoading from '@/components/ShowLoading';
 
 const mapState = (state: RootState) => ({
   detail: state.house.detail,
