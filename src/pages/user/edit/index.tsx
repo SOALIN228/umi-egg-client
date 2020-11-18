@@ -18,7 +18,7 @@ const mapState = (state: RootState) => ({
 });
 
 const mapDispatch = (dispatch: Dispatch) => ({
-  editUserAsync: (payload: object = {}) => dispatch.user.editUserAsync(payload),
+  editUserAsync: (payload: object) => dispatch.user.editUserAsync(payload),
 });
 
 interface IProps {

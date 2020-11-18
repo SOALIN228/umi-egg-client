@@ -18,6 +18,11 @@ interface IUser {
   sign: string;
 }
 
+interface ILoginInfo {
+  id: number;
+  username: string;
+}
+
 interface UserState {
   id: number | undefined;
   username: string;
@@ -66,7 +71,7 @@ export const user = createModel<RootModel>()({
         console.log('err', err);
       }
     },
-    async editUserAsync(payload: object = {}, state) {
+    async editUserAsync(payload: object, state) {
       try {
         const result: IUser = await http<IUser>({
           url: '/user/edit',
@@ -80,6 +85,38 @@ export const user = createModel<RootModel>()({
           });
           Toast.success('编辑成功');
           history.push('/user');
+        }
+      } catch (err) {
+        console.log('err', err);
+      }
+    },
+    async loginAsync(payload: object, state) {
+      try {
+        const result: ILoginInfo = await http<ILoginInfo>({
+          url: '/user/login',
+          body: payload,
+          method: 'post',
+        });
+        if (result) {
+          dispatch({
+            type: 'user/editUser',
+            payload: result,
+          });
+          Toast.success('登录成功');
+        }
+      } catch (err) {
+        console.log('err', err);
+      }
+    },
+    async registerAsync(payload: object, state) {
+      try {
+        const result: ILoginInfo = await http<ILoginInfo>({
+          url: '/user/register',
+          body: payload,
+          method: 'post',
+        });
+        if (result) {
+          Toast.success('注册成功');
         }
       } catch (err) {
         console.log('err', err);
