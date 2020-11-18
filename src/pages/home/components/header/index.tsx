@@ -11,13 +11,13 @@ import * as Cookie from 'es-cookie';
 const Header: React.FC<{}> = props => {
   useEffect(() => {}, []);
 
-  console.log('header render');
+  const cookie = Cookie.get('user');
   return (
     <div className={'header'}>
       <div className={'header_title'}>民宿</div>
       <div className={'header_login'}>
-        {Cookie.get('user') ? (
-          JSON.parse(Cookie.get('user')).username
+        {cookie ? (
+          JSON.parse(cookie as string).username
         ) : (
           <>
             <Link to="/login">登录</Link> | <Link to="/register">注册</Link>

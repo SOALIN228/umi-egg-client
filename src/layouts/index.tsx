@@ -10,6 +10,7 @@ import MenuBar from '@/components/MenuBar';
 import { Provider } from 'react-redux';
 import { useLocation } from 'umi';
 import { store } from '@/store';
+import '../global.less';
 
 const BaseLayout: React.FC<{}> = props => {
   const location = useLocation();

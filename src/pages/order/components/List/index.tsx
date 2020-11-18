@@ -6,7 +6,7 @@
  */
 import React, { useEffect } from 'react';
 import OrderItem from '@/pages/order/components/Item';
-import { ActivityIndicator } from 'antd-mobile';
+import OrderSkeletons from '@/skeletons/OrderSkeletons';
 import { isEmpty } from 'lodash';
 
 export interface OrderItem {
@@ -30,7 +30,7 @@ const List: React.FC<IProps> = props => {
   return (
     <div>
       {isEmpty(props.orders) ? (
-        <ActivityIndicator />
+        <OrderSkeletons />
       ) : (
         <div className="tab-lists">
           {props?.orders?.map(item => (
