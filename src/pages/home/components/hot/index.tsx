@@ -4,7 +4,7 @@
  * Time: 06:58
  * Desc:
  */
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 import { history } from 'umi';
 
 export interface HouseItem {
@@ -52,4 +52,4 @@ const Hot: React.FC<IProps> = props => {
   );
 };
 
-export default Hot;
+export default memo(Hot);

@@ -4,13 +4,14 @@
  * Time: 06:56
  * Desc:
  */
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 import { Link } from 'umi';
 import * as Cookie from 'es-cookie';
 
 const Header: React.FC<{}> = props => {
   useEffect(() => {}, []);
 
+  console.log('header render');
   return (
     <div className={'header'}>
       <div className={'header_title'}>民宿</div>
@@ -27,4 +28,4 @@ const Header: React.FC<{}> = props => {
   );
 };
 
-export default Header;
+export default memo(Header);

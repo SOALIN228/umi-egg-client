@@ -11,7 +11,7 @@ import Hot, { HouseItem } from '@/pages/home/components/hot';
 import useHttpHook from '@/hooks/useHttpHook';
 import './index.less';
 
-const Home: React.FC<{}> = (props) => {
+const Home: React.FC<{}> = props => {
   const [citys, citysLoading] = useHttpHook<ICityItem[][]>({
     url: '/commons/citys',
     method: 'post',
@@ -23,13 +23,13 @@ const Home: React.FC<{}> = (props) => {
     watch: [],
   });
 
-  useEffect(() => {
-  });
+  useEffect(() => {}, []);
+
   return (
     <div className={'home'}>
-      <Header/>
-      <Search citys={citys} citysLoading={citysLoading}/>
-      <Hot houses={houses}/>
+      <Header />
+      <Search citys={citys} citysLoading={citysLoading} />
+      <Hot houses={houses} />
     </div>
   );
 };
