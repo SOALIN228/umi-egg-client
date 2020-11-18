@@ -9,6 +9,7 @@ import { RootModel } from './models';
 import http from '@/utils/http';
 import { Toast } from 'antd-mobile';
 import { history } from 'umi';
+import * as Cookie from 'es-cookie';
 
 interface IUser {
   id: number;
@@ -103,6 +104,8 @@ export const user = createModel<RootModel>()({
             payload: result,
           });
           Toast.success('登录成功');
+          Cookie.set('user', JSON.stringify(result));
+          history.push('/');
         }
       } catch (err) {
         console.log('err', err);
@@ -117,6 +120,8 @@ export const user = createModel<RootModel>()({
         });
         if (result) {
           Toast.success('注册成功');
+          Cookie.set('user', JSON.stringify(result));
+          history.push('/');
         }
       } catch (err) {
         console.log('err', err);

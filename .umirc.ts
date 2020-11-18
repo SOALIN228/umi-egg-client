@@ -18,16 +18,19 @@ export default defineConfig({
           path: '/order',
           component: './order/index',
           title: '订单',
+          auth: true,
         },
         {
           path: '/user',
           component: './user/index',
           title: '我的',
+          auth: true,
         },
         {
           path: '/user/edit',
           component: './user/edit',
           title: '设置用户',
+          auth: true,
         },
         {
           path: '/search',
