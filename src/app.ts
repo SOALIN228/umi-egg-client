@@ -5,13 +5,12 @@
  * Desc:
  */
 import { history } from 'umi';
-import * as Cookie from 'es-cookie';
 
-export function onRouteChange(route) {
+export function onRouteChange(route: any) {
   const nowPath = route.routes[0].routes.filter(
-    item => item.path === route.location.pathname,
+    (item: any) => item.path === route.location.pathname,
   );
-  const isLogin = Cookie.get('user');
+  const isLogin = localStorage.getItem('token');
 
   if (nowPath.length === 1 && nowPath[0].auth && !isLogin) {
     history.push({

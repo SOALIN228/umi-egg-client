@@ -9,7 +9,6 @@ import { RootModel } from './models';
 import http from '@/utils/http';
 import { Toast } from 'antd-mobile';
 import { history } from 'umi';
-import * as Cookie from 'es-cookie';
 
 interface IUser {
   id: number;
@@ -22,6 +21,7 @@ interface IUser {
 interface ILoginInfo {
   id: number;
   username: string;
+  token: string;
 }
 
 interface UserState {
@@ -99,13 +99,15 @@ export const user = createModel<RootModel>()({
           method: 'post',
         });
         if (result) {
+          localStorage.setItem('token', result.token);
+          localStorage.setItem('username', result.username);
+
           dispatch({
             type: 'user/editUser',
             payload: result,
           });
           Toast.success('登录成功');
-          Cookie.set('user', JSON.stringify(result));
-          history.push('/');
+          // history.push('/');
         }
       } catch (err) {
         console.log('err', err);
@@ -119,8 +121,10 @@ export const user = createModel<RootModel>()({
           method: 'post',
         });
         if (result) {
+          localStorage.setItem('token', result.token);
+          localStorage.setItem('username', result.username);
+
           Toast.success('注册成功');
-          Cookie.set('user', JSON.stringify(result));
           history.push('/');
         }
       } catch (err) {
