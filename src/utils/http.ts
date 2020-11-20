@@ -59,6 +59,14 @@ export default function http<T>({
             resolve(res.data);
             setResult && setResult(res.data);
           } else {
+            if (res.status === 1001) {
+              if (location.pathname !== '/login') {
+                location.href = '/login?from=' + location.pathname;
+              } else {
+                location.href = '/login';
+              }
+              localStorage.clear();
+            }
             Toast.fail(res.errMsg);
             reject(res.errMsg);
           }
