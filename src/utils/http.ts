@@ -24,9 +24,17 @@ export default function http<T>({
   setResult,
 }: Options) {
   setLoading && setLoading(true);
-  const defaultHeader: object = {
+
+  const token = localStorage.getItem('token');
+  let defaultHeader: object = {
     'Content-type': 'application/json',
   };
+  defaultHeader = token
+    ? {
+        ...defaultHeader,
+        token,
+      }
+    : defaultHeader;
 
   let params: any;
   if (method.toUpperCase() === 'GET') {

@@ -5,7 +5,7 @@
  * Desc:
  */
 import React, { useEffect } from 'react';
-import { List } from 'antd-mobile';
+import { List, Button } from 'antd-mobile';
 import { history } from 'umi';
 import { connect } from 'react-redux';
 import { RootState, Dispatch } from '@/store';
@@ -20,6 +20,7 @@ const mapState = (state: RootState) => ({
 const mapDispatch = (dispatch: Dispatch) => ({
   getUserAsync: (payload: { id: number }) =>
     dispatch.user.getUserAsync(payload),
+  logoutAsync: () => dispatch.user.logoutAsync(),
 });
 
 type StateProps = ReturnType<typeof mapState>;
@@ -36,6 +37,10 @@ const User: React.FC<Props> = props => {
     });
   };
 
+  const handleLogout = () => {
+    props.logoutAsync();
+  };
+
   useEffect(() => {
     props.getUserAsync({
       id: 10,
@@ -49,7 +54,10 @@ const User: React.FC<Props> = props => {
           设置
         </div>
         <div className="user">
-          <img alt="user" src={props.avatar} />
+          <img
+            alt="user"
+            src={props.avatar || require('../../assets/yay.jpg')}
+          />
           <div className="tel">{props.tel}</div>
           <div className="sign">{props.sign}</div>
         </div>
@@ -61,6 +69,9 @@ const User: React.FC<Props> = props => {
           <List.Item arrow="horizontal">联系客服</List.Item>
         </List>
       </div>
+      <Button style={{ marginTop: '100px' }} onClick={handleLogout}>
+        退出登录
+      </Button>
     </div>
   );
 };

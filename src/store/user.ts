@@ -32,6 +32,20 @@ interface UserState {
   sign: string;
 }
 
+function urlGet(key: string, href?: string): string | null {
+  const queryStr = href ? href.split('?') : window.location.href.split('?');
+  if (queryStr[1]) {
+    const paramsObj = queryStr[1].split('&');
+    let obj: any = {};
+    paramsObj.map(item => {
+      const _itme = item.split('=');
+      obj[_itme[0]] = decodeURIComponent(_itme[1]);
+    });
+    return key ? obj[key] : null;
+  }
+  return null;
+}
+
 export const user = createModel<RootModel>()({
   state: {
     id: undefined,
@@ -107,7 +121,8 @@ export const user = createModel<RootModel>()({
             payload: result,
           });
           Toast.success('登录成功');
-          // history.push('/');
+          const routerHref = urlGet('from');
+          routerHref ? history.push(routerHref) : history.push('/');
         }
       } catch (err) {
         console.log('err', err);
@@ -126,6 +141,22 @@ export const user = createModel<RootModel>()({
 
           Toast.success('注册成功');
           history.push('/');
+        }
+      } catch (err) {
+        console.log('err', err);
+      }
+    },
+    async logoutAsync(payload, state) {
+      try {
+        const result: ILoginInfo = await http<ILoginInfo>({
+          url: '/user/logout',
+          body: payload,
+          method: 'post',
+        });
+        if (result) {
+          localStorage.clear();
+          Toast.success('退出登录成功');
+          location.href = '/login?from=' + location.pathname;
         }
       } catch (err) {
         console.log('err', err);
