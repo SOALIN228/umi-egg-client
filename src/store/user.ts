@@ -14,7 +14,7 @@ interface IUser {
   id: number;
   username: string;
   avatar: string;
-  tel: number;
+  phone: number;
   sign: string;
 }
 
@@ -25,10 +25,10 @@ interface ILoginInfo {
 }
 
 interface UserState {
-  id: number | undefined;
+  id?: number;
   username: string;
   avatar: string;
-  tel: number | undefined;
+  phone?: number;
   sign: string;
 }
 
@@ -51,7 +51,7 @@ export const user = createModel<RootModel>()({
     id: undefined,
     username: '',
     avatar: '',
-    tel: undefined,
+    phone: undefined,
     sign: '',
   } as UserState,
   reducers: {

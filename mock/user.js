@@ -13,7 +13,7 @@ export default {
         username: '测试用户',
         avatar:
           'http://img3.mukewang.com/szimg/5d1032ab08719e0906000338-360-202.jpg',
-        tel: 123456789001,
+        phone: 123456789001,
         sign: '花桥流水',
       },
     });

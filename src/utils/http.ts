@@ -59,7 +59,8 @@ export default function http<T>({
             resolve(res.data);
             setResult && setResult(res.data);
           } else {
-            if (res.status === 1001) {
+            // 用户未登录，或用户不存在
+            if (res.status === 1001 || res.status === 2002) {
               if (location.pathname !== '/login') {
                 location.href = '/login?from=' + location.pathname;
               } else {

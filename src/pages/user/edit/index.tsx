@@ -11,14 +11,15 @@ import { connect } from 'react-redux';
 import { RootState, Dispatch } from '@/store';
 
 const mapState = (state: RootState) => ({
-  id: state.user.id,
+  id: state.user.id as number,
   avatar: state.user.avatar,
-  tel: state.user.tel,
+  phone: state.user.phone,
   sign: state.user.sign,
 });
 
 const mapDispatch = (dispatch: Dispatch) => ({
   editUserAsync: (payload: object) => dispatch.user.editUserAsync(payload),
+  getUserAsync: () => dispatch.user.getUserAsync({}),
 });
 
 interface IProps {
@@ -35,13 +36,12 @@ type Props = StateProps & DispatchProps & IProps;
 
 interface IFile {
   url: string;
-  id: number | undefined;
+  id: number;
 }
 
 const Edit: React.FC<Props> = props => {
-  const [files, setFiles] = useState<IFile[]>([
-    { url: props.avatar || '', id: props.id },
-  ]);
+  const initFile = props.avatar ? [{ url: props.avatar, id: props.id }] : [];
+  const [files, setFiles] = useState<IFile[]>(initFile);
   const { getFieldProps, validateFields } = props.form;
   const handleChange = (files: any) => {
     if (files[0]?.file?.size / 1024 / 1024 > 0.5) {
@@ -52,7 +52,7 @@ const Edit: React.FC<Props> = props => {
   };
 
   const handleSubmit = () => {
-    if (!files.length && files[0].url) {
+    if (!files.length) {
       Toast.fail('请上传图片');
       return;
     }
@@ -63,14 +63,16 @@ const Edit: React.FC<Props> = props => {
       } else {
         props.editUserAsync({
           avatar: files[0].url,
-          tel: value.tel,
+          phone: value.phone,
           sign: value.sign,
         });
       }
     });
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    props.getUserAsync();
+  }, []);
 
   return (
     <div className="user-edit">
@@ -82,28 +84,24 @@ const Edit: React.FC<Props> = props => {
             onChange={handleChange}
           />
         </List.Item>
-        <List.Item>
-          <InputItem
-            {...getFieldProps('tel', {
-              rules: [{ required: true }],
-              initialValue: props.tel,
-            })}
-            placeholder="电话"
-          >
-            电话：
-          </InputItem>
-        </List.Item>
-        <List.Item>
-          <InputItem
-            {...getFieldProps('sign', {
-              rules: [{ required: true }],
-              initialValue: props.sign,
-            })}
-            placeholder="签名"
-          >
-            签名：
-          </InputItem>
-        </List.Item>
+        <InputItem
+          {...getFieldProps('phone', {
+            rules: [{ required: true }],
+            initialValue: props.phone,
+          })}
+          placeholder="电话"
+        >
+          电话：
+        </InputItem>
+        <InputItem
+          {...getFieldProps('sign', {
+            rules: [{ required: true }],
+            initialValue: props.sign,
+          })}
+          placeholder="签名"
+        >
+          签名：
+        </InputItem>
       </List>
       <Button
         type="warning"

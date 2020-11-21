@@ -13,7 +13,7 @@ import './index.less';
 
 const mapState = (state: RootState) => ({
   avatar: state.user.avatar,
-  tel: state.user.tel,
+  phone: state.user.phone,
   sign: state.user.sign,
 });
 
@@ -58,7 +58,7 @@ const User: React.FC<Props> = props => {
             alt="user"
             src={props.avatar || require('../../assets/yay.jpg')}
           />
-          <div className="tel">{props.tel}</div>
+          <div className="phone">{props.phone}</div>
           <div className="sign">{props.sign}</div>
         </div>
       </div>
