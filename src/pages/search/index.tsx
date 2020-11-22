@@ -18,8 +18,9 @@ import './index.less';
 
 interface HouseItem {
   id: number;
-  img: string;
-  title: string;
+  imgs?: { url: string }[];
+  name: string;
+  info: string;
   price: string;
 }
 
@@ -108,7 +109,7 @@ const Search: React.FC<{}> = props => {
           onCancel={handleCancel}
           onSubmit={handleSubmit}
         />
-        {!houseLists.length ? (
+        {!houseLists.length && loading ? (
           <ActivityIndicator toast />
         ) : (
           <div className="result">
@@ -118,11 +119,11 @@ const Search: React.FC<{}> = props => {
                   alt="img"
                   className="item-img"
                   src={require('../../assets/blank.png')}
-                  data-src={item.img}
+                  data-src={item.imgs ? item.imgs[0].url : undefined}
                 />
                 <div className="item-right">
-                  <div className="title">{item.title}</div>
-                  <div className="price">{item.price}</div>
+                  <div className="title">{item.name}</div>
+                  <div className="price">¥ {item.price}</div>
                 </div>
               </div>
             ))}

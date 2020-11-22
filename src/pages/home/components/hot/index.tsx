@@ -10,7 +10,7 @@ import { history } from 'umi';
 export interface HouseItem {
   id: number;
   imgs?: { url: string }[];
-  title: string;
+  name: string;
   info: string;
   price: string;
 }
@@ -46,7 +46,7 @@ const Hot: React.FC<IProps> = props => {
               alt="img"
               src={item.imgs ? item.imgs[0].url : undefined}
             />
-            <div className="title">{item.title}</div>
+            <div className="title">{item.name}</div>
             <div className="info">{item.info}</div>
             <div className="price">￥{item.price}</div>
           </div>
