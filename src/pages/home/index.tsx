@@ -13,8 +13,8 @@ import useHttpHook from '@/hooks/useHttpHook';
 import './index.less';
 
 const Home: React.FC<{}> = props => {
-  const [citys, citysLoading] = useHttpHook<ICityItem[][]>({
-    url: '/commons/citys',
+  const [cities, citiesLoading] = useHttpHook<ICityItem[][]>({
+    url: '/commons/cities',
     method: 'post',
     watch: [],
   });
@@ -30,7 +30,7 @@ const Home: React.FC<{}> = props => {
     <ErrorBoundary>
       <div className={'home'}>
         <Header />
-        <Search citys={citys} citysLoading={citysLoading} />
+        <Search cities={cities} citiesLoading={citiesLoading} />
         <Hot houses={houses} />
       </div>
     </ErrorBoundary>

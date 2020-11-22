@@ -15,8 +15,8 @@ export interface ICityItem {
 }
 
 interface IProps {
-  citys?: ICityItem[][];
-  citysLoading?: boolean;
+  cities?: ICityItem[][];
+  citiesLoading?: boolean;
 }
 
 const Search: React.FC<IProps> = props => {
@@ -61,34 +61,38 @@ const Search: React.FC<IProps> = props => {
   useEffect(() => {}, []);
 
   return (
-    <div className={'search'}>
-      <div className="search-addr">
-        {!props.citysLoading && (
-          <Picker
-            data={props.citys || []}
-            title={'城市'}
-            value={selectedCity}
-            cascade={false}
-            cols={1}
-            onChange={handleCityChange}
-          >
-            <List.Item>可选城市</List.Item>
-          </Picker>
-        )}
-      </div>
-      <div className="search-time" onClick={handleDate}>
-        <p className="search-time_left">出租时间</p>
-        <p className="search-time_right">{times}</p>
-      </div>
-      <Button type="warning" size="large" onClick={handleClick}>
-        搜索民宿
-      </Button>
-      <Calendar
-        visible={dateShow}
-        onCancel={handleDate}
-        onConfirm={handleDateConfirm}
-      />
-    </div>
+    <>
+      {props.cities?.length && (
+        <div className={'search'}>
+          <div className="search-addr">
+            {!props.citiesLoading && (
+              <Picker
+                data={props.cities!}
+                title={'城市'}
+                value={selectedCity}
+                cascade={false}
+                cols={1}
+                onChange={handleCityChange}
+              >
+                <List.Item>可选城市</List.Item>
+              </Picker>
+            )}
+          </div>
+          <div className="search-time" onClick={handleDate}>
+            <p className="search-time_left">出租时间</p>
+            <p className="search-time_right">{times}</p>
+          </div>
+          <Button type="warning" size="large" onClick={handleClick}>
+            搜索民宿
+          </Button>
+          <Calendar
+            visible={dateShow}
+            onCancel={handleDate}
+            onConfirm={handleDateConfirm}
+          />
+        </div>
+      )}
+    </>
   );
 };
 
@@ -101,8 +105,8 @@ const Search: React.FC<IProps> = props => {
  */
 function areEqual(prevProps: IProps, nextProps: IProps) {
   return (
-    prevProps.citys === nextProps.citys &&
-    prevProps.citysLoading === nextProps.citysLoading
+    prevProps.cities === nextProps.cities &&
+    prevProps.citiesLoading === nextProps.citiesLoading
   );
 }
 
