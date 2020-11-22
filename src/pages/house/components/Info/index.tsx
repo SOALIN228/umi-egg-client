@@ -15,10 +15,11 @@ interface IInfo {
 
 const Info: React.FC<IInfo> = props => {
   useEffect(() => {}, []);
+
   return (
     <div className="info">
-      <div className="info-title">{props.info?.title}</div>
-      <div className="info-msg">简介：{props.info?.msg}</div>
+      <div className="info-title">{props.info?.name}</div>
+      <div className="info-msg">简介：{props.info?.info}</div>
       <div className="info-price">价格：¥ {props.info?.price || 0}</div>
       <div className="info-time">
         发布时间：{timer(props.info?.publishTime || 0)}

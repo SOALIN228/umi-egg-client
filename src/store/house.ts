@@ -11,16 +11,20 @@ import { CommonEnum } from '@/enums';
 
 export interface IDetailInfo {
   endTime: number;
-  msg: string;
+  info: string;
   price: string;
   publishTime: number;
   startTime: number;
-  title: string;
+  name: string;
+}
+
+export interface BannerProps {
+  url: string;
 }
 
 export interface IDetail {
   id: string;
-  banner: string[];
+  banner: BannerProps[];
   info: IDetailInfo;
 }
 
