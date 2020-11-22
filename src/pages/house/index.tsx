@@ -5,6 +5,7 @@
  * Desc:
  */
 import React, { useState, useEffect } from 'react';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import Banner from '@/pages/house/components/Banner';
 import Info from '@/pages/house/components/Info';
 import List from '@/pages/house/components/List';
@@ -75,18 +76,20 @@ const House: React.FC<Props> = props => {
   }, []);
 
   return (
-    <div className="house-page">
-      <Banner banner={props.detail.banner} />
-      <Info info={props.detail.info} />
-      <List list={props.comments} />
-      {props.comments.length ? (
-        <ShowLoading
-          showLoading={props.showLoading}
-          style={{ marginBottom: 50 }}
-        />
-      ) : null}
-      <Footer />
-    </div>
+    <ErrorBoundary>
+      <div className="house-page">
+        <Banner banner={props.detail.banner} />
+        <Info info={props.detail.info} />
+        <List list={props.comments} />
+        {props.comments.length ? (
+          <ShowLoading
+            showLoading={props.showLoading}
+            style={{ marginBottom: 50 }}
+          />
+        ) : null}
+        <Footer />
+      </div>
+    </ErrorBoundary>
   );
 };
 

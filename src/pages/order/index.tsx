@@ -5,6 +5,7 @@
  * Desc:
  */
 import React, { useState, useEffect } from 'react';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import { Tabs } from 'antd-mobile';
 import List, { OrderItem } from '@/pages/order/components/List';
 import ShowLoading from '@/components/ShowLoading';
@@ -13,7 +14,6 @@ import http from '@/utils/http';
 import { isEmpty } from 'lodash';
 import { CommonEnum } from '@/enums';
 import './index.less';
-import { AiOutlineFileJpg } from 'react-icons/ai/index';
 
 const Order: React.FC<{}> = props => {
   const [page, setPage] = useState(CommonEnum.PAGE);
@@ -82,17 +82,19 @@ const Order: React.FC<{}> = props => {
   }, [type]);
 
   return (
-    <div className={'order-page'}>
-      <Tabs tabs={tabs} onChange={handleChange}>
-        <div className="tab">
-          <List type={0} orders={orders} />
-        </div>
-        <div className="tab">
-          <List type={1} orders={orders} />
-        </div>
-      </Tabs>
-      <ShowLoading showLoading={showLoading} style={{ marginBottom: 50 }} />
-    </div>
+    <ErrorBoundary>
+      <div className={'order-page'}>
+        <Tabs tabs={tabs} onChange={handleChange}>
+          <div className="tab">
+            <List type={0} orders={orders} />
+          </div>
+          <div className="tab">
+            <List type={1} orders={orders} />
+          </div>
+        </Tabs>
+        <ShowLoading showLoading={showLoading} style={{ marginBottom: 50 }} />
+      </div>
+    </ErrorBoundary>
   );
 };
 

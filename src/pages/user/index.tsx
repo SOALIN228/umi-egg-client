@@ -5,6 +5,7 @@
  * Desc:
  */
 import React, { useEffect } from 'react';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import { List, Button } from 'antd-mobile';
 import { history } from 'umi';
 import { connect } from 'react-redux';
@@ -48,31 +49,33 @@ const User: React.FC<Props> = props => {
   }, []);
 
   return (
-    <div className="user-page">
-      <div className="info">
-        <div className="set" onClick={handleClick}>
-          设置
+    <ErrorBoundary>
+      <div className="user-page">
+        <div className="info">
+          <div className="set" onClick={handleClick}>
+            设置
+          </div>
+          <div className="user">
+            <img
+              alt="user"
+              src={props.avatar || require('../../assets/yay.jpg')}
+            />
+            <div className="phone">{props.phone}</div>
+            <div className="sign">{props.sign}</div>
+          </div>
         </div>
-        <div className="user">
-          <img
-            alt="user"
-            src={props.avatar || require('../../assets/yay.jpg')}
-          />
-          <div className="phone">{props.phone}</div>
-          <div className="sign">{props.sign}</div>
+        <div className="lists">
+          <List>
+            <List.Item arrow="horizontal">用户协议</List.Item>
+            <List.Item arrow="horizontal">常见问题</List.Item>
+            <List.Item arrow="horizontal">联系客服</List.Item>
+          </List>
         </div>
+        <Button style={{ marginTop: '100px' }} onClick={handleLogout}>
+          退出登录
+        </Button>
       </div>
-      <div className="lists">
-        <List>
-          <List.Item arrow="horizontal">用户协议</List.Item>
-          <List.Item arrow="horizontal">常见问题</List.Item>
-          <List.Item arrow="horizontal">联系客服</List.Item>
-        </List>
-      </div>
-      <Button style={{ marginTop: '100px' }} onClick={handleLogout}>
-        退出登录
-      </Button>
-    </div>
+    </ErrorBoundary>
   );
 };
 

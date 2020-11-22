@@ -5,6 +5,7 @@
  * Desc:
  */
 import React, { useEffect, useState } from 'react';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import Header from '@/pages/home/components/header';
 import Search, { ICityItem } from '@/pages/home/components/search';
 import Hot, { HouseItem } from '@/pages/home/components/hot';
@@ -26,11 +27,13 @@ const Home: React.FC<{}> = props => {
   useEffect(() => {}, []);
 
   return (
-    <div className={'home'}>
-      <Header />
-      <Search citys={citys} citysLoading={citysLoading} />
-      <Hot houses={houses} />
-    </div>
+    <ErrorBoundary>
+      <div className={'home'}>
+        <Header />
+        <Search citys={citys} citysLoading={citysLoading} />
+        <Hot houses={houses} />
+      </div>
+    </ErrorBoundary>
   );
 };
 

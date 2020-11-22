@@ -5,6 +5,7 @@
  * Desc:
  */
 import React, { useEffect } from 'react';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import { List, InputItem, Button, Toast } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import { history } from 'umi';
@@ -52,32 +53,34 @@ const Login: React.FC<Props> = props => {
   useEffect(() => {}, []);
 
   return (
-    <div className="login-page">
-      <List renderHeader={() => '用户登录'}>
-        <InputItem
-          {...getFieldProps('username', {
-            rules: [{ required: true }],
-          })}
-          placeholder="用户名"
-        >
-          用户名：
-        </InputItem>
-        <InputItem
-          {...getFieldProps('password', {
-            rules: [{ required: true }],
-          })}
-          placeholder="密码"
-        >
-          密码：
-        </InputItem>
-      </List>
-      <Button type="warning" onClick={handleSubmit}>
-        登录
-      </Button>
-      <div className="register" onClick={handleClick}>
-        没有账户，去注册
+    <ErrorBoundary>
+      <div className="login-page">
+        <List renderHeader={() => '用户登录'}>
+          <InputItem
+            {...getFieldProps('username', {
+              rules: [{ required: true }],
+            })}
+            placeholder="用户名"
+          >
+            用户名：
+          </InputItem>
+          <InputItem
+            {...getFieldProps('password', {
+              rules: [{ required: true }],
+            })}
+            placeholder="密码"
+          >
+            密码：
+          </InputItem>
+        </List>
+        <Button type="warning" onClick={handleSubmit}>
+          登录
+        </Button>
+        <div className="register" onClick={handleClick}>
+          没有账户，去注册
+        </div>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 };
 

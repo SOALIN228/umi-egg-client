@@ -5,6 +5,7 @@
  * Desc:
  */
 import React, { useEffect, useState } from 'react';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import { SearchBar, ActivityIndicator } from 'antd-mobile';
 import ShowLoading from '@/components/ShowLoading';
 import useHttpHook from '@/hooks/useHttpHook';
@@ -22,7 +23,7 @@ interface HouseItem {
   price: string;
 }
 
-const Search: React.FC<{}> = (props) => {
+const Search: React.FC<{}> = props => {
   const { query }: any = useLocation();
   const [houseName, setHouseName] = useState('');
   const [houseLists, setHouseLists] = useCallbackState<HouseItem[]>([]);
@@ -42,11 +43,14 @@ const Search: React.FC<{}> = (props) => {
     },
     watch: [page.pageNum, houseSubmitName],
   });
-  useObserverHook(`#${CommonEnum.LOADING_ID}`, (entries: IntersectionObserverEntry[]) => {
-    if (!loading && showNext !== entries[0].isIntersecting) {
-      setShowNext(entries[0].isIntersecting);
-    }
-  });
+  useObserverHook(
+    `#${CommonEnum.LOADING_ID}`,
+    (entries: IntersectionObserverEntry[]) => {
+      if (!loading && showNext !== entries[0].isIntersecting) {
+        setShowNext(entries[0].isIntersecting);
+      }
+    },
+  );
   useEffect(() => {
     if (showNext) {
       setPage({
@@ -95,30 +99,38 @@ const Search: React.FC<{}> = (props) => {
     }
   };
   return (
-    <div className='search-page'>
-      <SearchBar
-        placeholder='搜索民宿'
-        value={houseName}
-        onChange={handleChange}
-        onCancel={handleCancel}
-        onSubmit={handleSubmit}
-      />
-      {!houseLists.length
-        ? <ActivityIndicator toast/>
-        : <div className='result'>
-          {houseLists.map(item => (
-            <div className='item' key={item.id + Math.random()}>
-              <img alt='img' className='item-img' src={require('../../assets/blank.png')} data-src={item.img}/>
-              <div className='item-right'>
-                <div className='title'>{item.title}</div>
-                <div className='price'>{item.price}</div>
+    <ErrorBoundary>
+      <div className="search-page">
+        <SearchBar
+          placeholder="搜索民宿"
+          value={houseName}
+          onChange={handleChange}
+          onCancel={handleCancel}
+          onSubmit={handleSubmit}
+        />
+        {!houseLists.length ? (
+          <ActivityIndicator toast />
+        ) : (
+          <div className="result">
+            {houseLists.map(item => (
+              <div className="item" key={item.id + Math.random()}>
+                <img
+                  alt="img"
+                  className="item-img"
+                  src={require('../../assets/blank.png')}
+                  data-src={item.img}
+                />
+                <div className="item-right">
+                  <div className="title">{item.title}</div>
+                  <div className="price">{item.price}</div>
+                </div>
               </div>
-            </div>
-          ))}
-          <ShowLoading showLoading={showLoading}/>
-        </div>
-      }
-    </div>
+            ))}
+            <ShowLoading showLoading={showLoading} />
+          </div>
+        )}
+      </div>
+    </ErrorBoundary>
   );
 };
 

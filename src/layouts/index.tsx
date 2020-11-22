@@ -5,7 +5,6 @@
  * Desc:
  */
 import React from 'react';
-import ErrorBoundary from '@/components/ErrorBoundary';
 import MenuBar from '@/components/MenuBar';
 import { Provider } from 'react-redux';
 import { useLocation } from 'umi';
@@ -21,7 +20,7 @@ const BaseLayout: React.FC<{}> = props => {
         show={paths.includes(location.pathname)}
         pathname={location.pathname}
       />
-      <ErrorBoundary>{props.children}</ErrorBoundary>
+      {props.children}
     </Provider>
   );
 };
