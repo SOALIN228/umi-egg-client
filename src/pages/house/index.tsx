@@ -86,7 +86,9 @@ const House: React.FC<Props> = props => {
             showLoading={props.showLoading}
             style={{ marginBottom: 50 }}
           />
-        ) : null}
+        ) : (
+          <div className={'end'}>无评论信息～</div>
+        )}
         <Footer />
       </div>
     </ErrorBoundary>

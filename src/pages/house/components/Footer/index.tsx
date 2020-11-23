@@ -9,6 +9,7 @@ import Modal from '@/components/Modal';
 import { TextareaItem, Button, Toast } from 'antd-mobile';
 import { connect } from 'react-redux';
 import { Dispatch } from '@/store';
+import { useLocation } from 'umi';
 
 const mapDispatch = (dispatch: Dispatch) => ({
   addCommentsAsync: (payload?: object) =>
@@ -21,6 +22,7 @@ type Props = dispatchProps;
 const Footer: React.FC<Props> = props => {
   const [show, setShow] = useState(false);
   const [commentsValue, setCommentsValue] = useState();
+  const { query }: any = useLocation();
 
   const handleClick = () => {
     setShow(true);
@@ -39,6 +41,7 @@ const Footer: React.FC<Props> = props => {
       handleClose();
       props.addCommentsAsync({
         comment: commentsValue,
+        houseId: query?.id,
       });
     } else {
       Toast.fail('请添加信息');

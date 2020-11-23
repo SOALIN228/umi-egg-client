@@ -28,12 +28,17 @@ export interface IDetail {
   info: IDetailInfo;
 }
 
-export interface IComment {
-  id: number;
+interface UserProps {
   avatar: string;
   username: string;
+}
+
+export interface IComment {
+  id: number;
+  user: UserProps;
+  username: string;
   createTime: number;
-  info: string;
+  msg: string;
 }
 
 interface HouseState {
@@ -114,7 +119,7 @@ export const house = createModel<RootModel>()({
     async getCommentsAsync(payload: object = {}, state) {
       try {
         const comments: IComment[] = await http<IComment[]>({
-          url: '/comments/lists',
+          url: '/comment/lists',
           body: {
             ...payload,
             pageSize: state.house.page.pageSize,
@@ -137,7 +142,7 @@ export const house = createModel<RootModel>()({
     async addCommentsAsync(payload: object = {}, state) {
       try {
         const res = await http({
-          url: '/comments/add',
+          url: '/comment/add',
           body: payload,
           method: 'post',
         });

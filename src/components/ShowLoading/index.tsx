@@ -29,7 +29,7 @@ const ShowLoading: React.FC<IProps> = props => {
         </div>
       ) : (
         <div className="loading-info" key={'no-data'}>
-          没有数据了~
+          到底了~
         </div>
       )}
     </div>

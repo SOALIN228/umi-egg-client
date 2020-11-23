@@ -114,7 +114,7 @@ const Search: React.FC<{}> = props => {
         ) : (
           <div className="result">
             {houseLists.map(item => (
-              <div className="item" key={item.id + Math.random()}>
+              <div className="item" key={item.id}>
                 <img
                   alt="img"
                   className="item-img"
