@@ -19,8 +19,7 @@ const mapState = (state: RootState) => ({
 });
 
 const mapDispatch = (dispatch: Dispatch) => ({
-  getUserAsync: (payload: { id: number }) =>
-    dispatch.user.getUserAsync(payload),
+  getUserAsync: () => dispatch.user.getUserAsync(),
   logoutAsync: () => dispatch.user.logoutAsync(),
 });
 
@@ -43,9 +42,7 @@ const User: React.FC<Props> = props => {
   };
 
   useEffect(() => {
-    props.getUserAsync({
-      id: 10,
-    });
+    props.getUserAsync();
   }, []);
 
   return (

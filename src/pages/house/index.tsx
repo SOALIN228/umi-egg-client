@@ -24,6 +24,7 @@ const mapState = (state: RootState) => ({
   showLoading: state.house.showLoading,
   reloadCommentsNum: state.house.reloadCommentsNum,
   reset: state.house.reset,
+  order: state.house.order,
 });
 
 const mapDispatch = (dispatch: Dispatch) => ({
@@ -32,6 +33,12 @@ const mapDispatch = (dispatch: Dispatch) => ({
     dispatch.house.getCommentsAsync(payload),
   reloadComments: () => dispatch.house.reloadComments(),
   resetData: (payload: object = {}) => dispatch.house.resetData(payload),
+  hasOrderAsync: (payload: object = {}) =>
+    dispatch.house.hasOrderAsync(payload),
+  addOrderAsync: (payload: object = {}) =>
+    dispatch.house.addOrderAsync(payload),
+  delOrderAsync: (payload: object = {}) =>
+    dispatch.house.delOrderAsync(payload),
 });
 
 type StateProps = ReturnType<typeof mapState>;
@@ -40,6 +47,19 @@ type Props = StateProps & DispatchProps;
 
 const House: React.FC<Props> = props => {
   const { query }: any = useLocation();
+
+  const handleBtnClick = (id?: number) => {
+    if (!id) {
+      props.addOrderAsync({
+        id: query?.id,
+      });
+    } else {
+      props.delOrderAsync({
+        id: query?.id,
+      });
+    }
+  };
+
   useEffect(() => {
     props.getDetailAsync({
       id: query?.id,
@@ -48,6 +68,12 @@ const House: React.FC<Props> = props => {
 
   useEffect(() => {
     props.getCommentsAsync({
+      id: query?.id,
+    });
+  }, [props.reloadCommentsNum]);
+
+  useEffect(() => {
+    props.hasOrderAsync({
       id: query?.id,
     });
   }, [props.reloadCommentsNum]);
@@ -79,7 +105,11 @@ const House: React.FC<Props> = props => {
     <ErrorBoundary>
       <div className="house-page">
         <Banner banner={props.detail.banner} />
-        <Info info={props.detail.info} />
+        <Info
+          info={props.detail.info}
+          order={props.order}
+          btnClick={handleBtnClick}
+        />
         <List list={props.comments} />
         {props.comments.length ? (
           <ShowLoading

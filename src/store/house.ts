@@ -41,6 +41,13 @@ export interface IComment {
   msg: string;
 }
 
+export interface IOrder {
+  id: number;
+  isPayed: number;
+  houseId: string;
+  userId: string;
+}
+
 interface HouseState {
   detail: IDetail;
   comments: IComment[];
@@ -48,6 +55,7 @@ interface HouseState {
   showLoading: boolean;
   reloadCommentsNum: number;
   reset: boolean;
+  order: IOrder;
 }
 
 export const house = createModel<RootModel>()({
@@ -58,12 +66,19 @@ export const house = createModel<RootModel>()({
     showLoading: true,
     reloadCommentsNum: 0,
     reset: false,
+    order: {},
   } as HouseState,
   reducers: {
     getDetail(state, payload: IDetail) {
       return {
         ...state,
         detail: payload,
+      };
+    },
+    setOrder(state, payload: IOrder) {
+      return {
+        ...state,
+        order: payload,
       };
     },
     getComments(state, payload: IComment[]) {
@@ -158,5 +173,26 @@ export const house = createModel<RootModel>()({
         console.log('err', err);
       }
     },
+    async hasOrderAsync(payload: object, state) {
+      await handleOrder('/orders/hasOrder', dispatch, payload);
+    },
+    async addOrderAsync(payload: object, state) {
+      await handleOrder('/orders/addOrder', dispatch, payload);
+    },
+    async delOrderAsync(payload: object, state) {
+      await handleOrder('/orders/delOrder', dispatch, payload);
+    },
   }),
 });
+
+async function handleOrder(url: string, dispatch: any, payload: any) {
+  const result = await http({
+    url,
+    body: payload,
+    method: 'post',
+  });
+  dispatch({
+    type: 'house/setOrder',
+    payload: result,
+  });
+}
