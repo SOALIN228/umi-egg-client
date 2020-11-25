@@ -5,9 +5,10 @@
  * Desc:
  */
 import React, { useEffect } from 'react';
-import { Button } from 'antd-mobile';
+import { Button, Toast } from 'antd-mobile';
 import { OrderType } from '@/pages/order/components/List';
 import timer from '@/utils/timer';
+import http from '@/utils/http';
 
 interface IProps {
   type: OrderType;
@@ -20,7 +21,7 @@ const Item: React.FC<IProps> = props => {
     switch (props.type) {
       case 0:
         return (
-          <Button type="warning" size="small">
+          <Button type="warning" size="small" onClick={handlePay}>
             去支付
           </Button>
         );
@@ -30,6 +31,21 @@ const Item: React.FC<IProps> = props => {
         break;
     }
   };
+
+  const handlePay = async () => {
+    const result = await http({
+      url: '/orders/pay',
+      body: {
+        id: props.id,
+      },
+      method: 'post',
+    });
+    if (result) {
+      Toast.success('支付成功');
+      window.location.reload();
+    }
+  };
+
   useEffect(() => {}, []);
 
   return (

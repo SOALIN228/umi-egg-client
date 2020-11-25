@@ -10,6 +10,7 @@ import http from '@/utils/http';
 import { CommonEnum } from '@/enums';
 
 export interface IDetailInfo {
+  id: number;
   endTime: number;
   info: string;
   price: string;
@@ -186,16 +187,17 @@ export const house = createModel<RootModel>()({
 });
 
 async function handleOrder(url: string, dispatch: any, payload: any) {
-  const result = await http<IOrder>({
+  let result = await http<IOrder>({
     url,
     body: payload,
     method: 'post',
   });
   // 只显示未预定和带支付状态的订单
-  if (result.isPayed === 0 || result.isPayed === 1) {
-    dispatch({
-      type: 'house/setOrder',
-      payload: result,
-    });
+  if (result && (result.isPayed === -1 || result.isPayed === 2)) {
+    result = {} as IOrder;
   }
+  dispatch({
+    type: 'house/setOrder',
+    payload: result,
+  });
 }
