@@ -7,7 +7,5 @@
 import dayjs from 'dayjs';
 
 export default function timer(time: string | number | Date, type = 'all') {
-  return dayjs(time).format(
-    type === 'all' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD',
-  );
+  return dayjs(time).format(type === 'all' ? 'YYYY-MM-DD HH:mm:ss' : type);
 }

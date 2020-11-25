@@ -25,10 +25,9 @@ const Order: React.FC<{}> = props => {
     { title: '未支付', sub: 0 },
     { title: '已支付', sub: 1 },
   ];
-
   const invokeHttp = async (pageNum: number) => {
     const result = await http<OrderItem[]>({
-      url: '/order/lists',
+      url: '/orders/lists',
       body: {
         ...page,
         pageNum,
@@ -41,11 +40,10 @@ const Order: React.FC<{}> = props => {
 
   const fetchOrder = async (pageNum: number) => {
     const result = await invokeHttp(pageNum);
-    if (!isEmpty(result) && result.length === page.pageSize) {
-      setOrders(result);
+    setOrders(result);
+    if (result.length === page.pageSize) {
       setShowLoading(true);
     } else {
-      console.log('111');
       setShowLoading(false);
     }
   };

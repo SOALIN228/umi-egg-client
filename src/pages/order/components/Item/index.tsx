@@ -7,6 +7,7 @@
 import React, { useEffect } from 'react';
 import { Button } from 'antd-mobile';
 import { OrderType } from '@/pages/order/components/List';
+import timer from '@/utils/timer';
 
 interface IProps {
   type: OrderType;
@@ -29,16 +30,17 @@ const Item: React.FC<IProps> = props => {
         break;
     }
   };
-
   useEffect(() => {}, []);
 
   return (
     <div className="order-item">
-      <img alt="order" src={props?.img} />
+      <img alt="order" src={props?.house?.imgs[0]?.url} />
       <div className="center">
-        <div className="title">{props?.title}</div>
-        <div className="price">￥{props?.price}</div>
-        <div className="time">{props?.createTime}</div>
+        <div className="title">{props?.house?.name}</div>
+        <div className="price">￥{props?.house?.price}</div>
+        <div className="time">
+          {timer(props?.house?.createTime, 'YYYY-MM-DD')}
+        </div>
       </div>
       <div className="pay">{renderPay()}</div>
     </div>

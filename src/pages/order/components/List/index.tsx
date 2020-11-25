@@ -4,7 +4,7 @@
  * Time: 14:10
  * Desc:
  */
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import OrderItem from '@/pages/order/components/Item';
 import OrderSkeletons from '@/skeletons/OrderSkeletons';
 import { isEmpty } from 'lodash';
@@ -26,10 +26,19 @@ interface IProps {
 }
 
 const List: React.FC<IProps> = props => {
-  useEffect(() => {}, []);
+  const [state, setState] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (isEmpty(props?.orders)) {
+        setState(true);
+      }
+    }, 1500);
+  }, []);
+
   return (
     <div>
-      {isEmpty(props.orders) ? (
+      {isEmpty(props.orders) && !state ? (
         <OrderSkeletons />
       ) : (
         <div className="tab-lists">
