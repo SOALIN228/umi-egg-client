@@ -20,19 +20,19 @@ import './index.less';
 
 const mapState = (state: RootState) => ({
   detail: state.house.detail,
-  comments: state.house.comments,
-  showLoading: state.house.showLoading,
-  reloadCommentsNum: state.house.reloadCommentsNum,
-  reset: state.house.reset,
+  comments: state.comment.comments,
+  showLoading: state.comment.showLoading,
+  reloadCommentsNum: state.comment.reloadCommentsNum,
+  reset: state.comment.reset,
   order: state.house.order,
 });
 
 const mapDispatch = (dispatch: Dispatch) => ({
   getDetailAsync: (payload?: object) => dispatch.house.getDetailAsync(payload),
   getCommentsAsync: (payload?: object) =>
-    dispatch.house.getCommentsAsync(payload),
-  reloadComments: () => dispatch.house.reloadComments(),
-  resetData: (payload: object = {}) => dispatch.house.resetData(payload),
+    dispatch.comment.getCommentsAsync(payload),
+  reloadComments: () => dispatch.comment.reloadComments(),
+  resetData: (payload: object = {}) => dispatch.comment.resetData(payload),
   hasOrderAsync: (payload: object = {}) =>
     dispatch.house.hasOrderAsync(payload),
   addOrderAsync: (payload: object = {}) =>
@@ -78,6 +78,8 @@ const House: React.FC<Props> = props => {
     });
   }, [props.reloadCommentsNum]);
 
+  // 未加载完毕&loading未显示&已获取到评论信息
+  // 或需要重新render时执行
   useObserverHook(
     '#' + CommonEnum.LOADING_ID,
     entries => {

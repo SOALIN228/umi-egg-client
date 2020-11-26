@@ -6,12 +6,12 @@
  */
 export const LOADING_ID = 'soa-loading';
 
-export interface IPage {
+export interface PageProps {
   pageSize: number;
   pageNum: number;
 }
 
 export const PAGE = {
-  pageSize: 8,
+  pageSize: 4,
   pageNum: 1,
 };

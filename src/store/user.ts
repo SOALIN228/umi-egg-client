@@ -10,7 +10,7 @@ import http from '@/utils/http';
 import { Toast } from 'antd-mobile';
 import { history } from 'umi';
 
-interface IUser {
+export interface UserProps {
   id: number;
   username: string;
   avatar: string;
@@ -18,7 +18,7 @@ interface IUser {
   sign: string;
 }
 
-interface ILoginInfo {
+interface LoginInfo {
   id: number;
   username: string;
   token: string;
@@ -71,7 +71,7 @@ export const user = createModel<RootModel>()({
   effects: dispatch => ({
     async getUserAsync(payload, state) {
       try {
-        const user: IUser = await http<IUser>({
+        const user: UserProps = await http<UserProps>({
           url: '/user/detail',
           method: 'post',
         });
@@ -87,7 +87,7 @@ export const user = createModel<RootModel>()({
     },
     async editUserAsync(payload: object, state) {
       try {
-        const result: IUser = await http<IUser>({
+        const result: UserProps = await http<UserProps>({
           url: '/user/edit',
           body: payload,
           method: 'post',
@@ -106,7 +106,7 @@ export const user = createModel<RootModel>()({
     },
     async loginAsync(payload: object, state) {
       try {
-        const result: ILoginInfo = await http<ILoginInfo>({
+        const result: LoginInfo = await http<LoginInfo>({
           url: '/user/login',
           body: payload,
           method: 'post',
@@ -129,7 +129,7 @@ export const user = createModel<RootModel>()({
     },
     async registerAsync(payload: object, state) {
       try {
-        const result: ILoginInfo = await http<ILoginInfo>({
+        const result: LoginInfo = await http<LoginInfo>({
           url: '/user/register',
           body: payload,
           method: 'post',
@@ -147,7 +147,7 @@ export const user = createModel<RootModel>()({
     },
     async logoutAsync(payload, state) {
       try {
-        const result: ILoginInfo = await http<ILoginInfo>({
+        const result: LoginInfo = await http<LoginInfo>({
           url: '/user/logout',
           body: payload,
           method: 'post',

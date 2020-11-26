@@ -13,7 +13,7 @@ import { useLocation } from 'umi';
 
 const mapDispatch = (dispatch: Dispatch) => ({
   addCommentsAsync: (payload?: object) =>
-    dispatch.house.addCommentsAsync(payload),
+    dispatch.comment.addCommentsAsync(payload),
 });
 
 type dispatchProps = ReturnType<typeof mapDispatch>;
