@@ -10,6 +10,14 @@ import { UserProps } from '@/store/user';
 import { CommonEnum } from '@/enums';
 import http from '@/utils/http';
 
+interface CommentInfo {
+  id: number;
+  userId: string;
+  houseId: string;
+  msg: string;
+  createTime: number;
+}
+
 export interface CommentProps {
   id: number;
   user: UserProps;
@@ -95,7 +103,7 @@ export const comment = createModel<RootModel>()({
     },
     async addCommentsAsync(payload: object = {}, state) {
       try {
-        const res = await http({
+        const res = await http<CommentInfo>({
           url: '/comment/add',
           body: payload,
           method: 'post',
