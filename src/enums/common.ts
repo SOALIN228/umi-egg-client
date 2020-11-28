@@ -12,6 +12,6 @@ export interface PageProps {
 }
 
 export const PAGE = {
-  pageSize: 4,
+  pageSize: 3,
   pageNum: 1,
 };

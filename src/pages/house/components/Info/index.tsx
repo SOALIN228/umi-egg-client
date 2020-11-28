@@ -6,12 +6,12 @@
  */
 import React, { useEffect } from 'react';
 import { Button } from 'antd-mobile';
-import { IDetailInfo, IOrder } from '@/store/house';
+import { IDetailInfo, OrderProps } from '@/store/house';
 import timer from '@/utils/timer';
 
 interface IInfo {
   info?: IDetailInfo;
-  order: IOrder;
+  order: OrderProps;
   btnClick?: (id?: number) => void;
 }
 

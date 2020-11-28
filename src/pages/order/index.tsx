@@ -7,93 +7,91 @@
 import React, { useState, useEffect } from 'react';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { Tabs } from 'antd-mobile';
-import List, { OrderItem } from '@/pages/order/components/List';
+import List from '@/pages/order/components/List';
 import ShowLoading from '@/components/ShowLoading';
 import useObserverHook from '@/hooks/useObserverHook';
-import http from '@/utils/http';
-import { isEmpty } from 'lodash';
 import { CommonEnum } from '@/enums';
+import { connect } from 'react-redux';
+import { RootState, Dispatch } from '@/store';
 import './index.less';
 
-const Order: React.FC<{}> = props => {
-  const [page, setPage] = useState(CommonEnum.PAGE);
-  const [orders, setOrders] = useState<OrderItem[]>([]);
-  const [showLoading, setShowLoading] = useState(true);
+const mapState = (state: RootState) => ({
+  orders: state.order.orders,
+  showLoading: state.order.showLoading,
+  reloadCommentsNum: state.order.reloadCommentsNum,
+});
+
+const mapDispatch = (dispatch: Dispatch) => ({
+  getOrdersAsync: (payload: { type: number }) =>
+    dispatch.order.getOrdersAsync(payload),
+  reloadOrders: () => dispatch.order.reloadOrders(),
+  resetData: (payload: object = {}) => dispatch.order.resetData(payload),
+});
+
+type StateProps = ReturnType<typeof mapState>;
+type DispatchProps = ReturnType<typeof mapDispatch>;
+type Props = StateProps & DispatchProps;
+
+const Order: React.FC<Props> = props => {
   const [type, setType] = useState(0);
 
   const tabs = [
     { title: '未支付', sub: 0 },
     { title: '已支付', sub: 1 },
   ];
-  const invokeHttp = async (pageNum: number) => {
-    const result = await http<OrderItem[]>({
-      url: '/orders/lists',
-      body: {
-        ...page,
-        pageNum,
-        type,
-      },
-      method: 'post',
-    });
-    return result;
-  };
-
-  const fetchOrder = async (pageNum: number) => {
-    const result = await invokeHttp(pageNum);
-    setOrders(result);
-    if (result.length === page.pageSize) {
-      setShowLoading(true);
-    } else {
-      setShowLoading(false);
-    }
-  };
 
   const handleChange = (e: any) => {
     setType(e.sub);
-    setPage(CommonEnum.PAGE);
-    setOrders([]);
-    setShowLoading(true);
+    props.resetData();
   };
 
-  useObserverHook('#' + CommonEnum.LOADING_ID, async entries => {
-    if (entries[0].isIntersecting && orders.length) {
-      const result = await invokeHttp(page.pageNum + 1);
+  useObserverHook(
+    '#' + CommonEnum.LOADING_ID,
+    async entries => {
+      // 每次页面loading 出现会触发监听，length变化会重新定义监听
       if (
-        !isEmpty(orders) &&
-        !isEmpty(result) &&
-        result.length === page.pageSize
+        props.showLoading &&
+        entries[0]?.isIntersecting &&
+        props.orders.length
       ) {
-        setOrders([...orders, ...result]);
-        setPage({
-          ...page,
-          pageNum: page.pageNum + 1,
-        });
-        setShowLoading(true);
-      } else {
-        setShowLoading(false);
+        props.reloadOrders();
       }
-    }
-  });
+    },
+    [props.orders.length, props.showLoading],
+  );
 
   useEffect(() => {
-    fetchOrder(1);
-  }, [type]);
+    props.getOrdersAsync({ type });
+  }, [type, props.reloadCommentsNum]);
+
+  useEffect(() => {
+    return () => {
+      props.resetData({});
+    };
+  }, []);
 
   return (
     <ErrorBoundary>
       <div className={'order-page'}>
         <Tabs tabs={tabs} onChange={handleChange}>
           <div className="tab">
-            <List type={0} orders={orders} />
+            <List type={0} orders={props.orders} />
           </div>
           <div className="tab">
-            <List type={1} orders={orders} />
+            <List type={1} orders={props.orders} />
           </div>
         </Tabs>
-        <ShowLoading showLoading={showLoading} style={{ marginBottom: 50 }} />
+        {props.orders.length ? (
+          <ShowLoading
+            showLoading={props.showLoading}
+            style={{ marginBottom: 50 }}
+          />
+        ) : (
+          <div className={'page-end'}>无订单信息～</div>
+        )}
       </div>
     </ErrorBoundary>
   );
 };
 
-export default Order;
+export default connect(mapState, mapDispatch)(Order);

@@ -7,27 +7,18 @@
 import React, { useState, useEffect } from 'react';
 import OrderItem from '@/pages/order/components/Item';
 import OrderSkeletons from '@/skeletons/OrderSkeletons';
+import { OrderItemProps } from '@/store/order';
 import { isEmpty } from 'lodash';
-
-export interface OrderItem {
-  id: number;
-  img: string;
-  title: string;
-  info: string;
-  price: string;
-  createTime: string;
-}
 
 export type OrderType = 0 | 1;
 
 interface IProps {
-  orders?: OrderItem[];
+  orders?: OrderItemProps[];
   type: OrderType;
 }
 
 const List: React.FC<IProps> = props => {
   const [state, setState] = useState(false);
-
   useEffect(() => {
     setTimeout(() => {
       if (isEmpty(props?.orders)) {
@@ -46,7 +37,8 @@ const List: React.FC<IProps> = props => {
             <OrderItem
               type={props.type}
               key={item.id + Math.random()}
-              {...item}
+              id={item.id}
+              house={item.house}
             />
           ))}
         </div>

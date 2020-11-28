@@ -69,7 +69,7 @@ export const user = createModel<RootModel>()({
     },
   },
   effects: dispatch => ({
-    async getUserAsync(payload, state) {
+    async getUserAsync(payload: object, state) {
       try {
         const user: UserProps = await http<UserProps>({
           url: '/user/detail',

@@ -7,13 +7,14 @@
 import React, { useEffect } from 'react';
 import { Button, Toast } from 'antd-mobile';
 import { OrderType } from '@/pages/order/components/List';
+import { HouseItem } from '@/pages/home/components/hot';
 import timer from '@/utils/timer';
 import http from '@/utils/http';
 
 interface IProps {
   type: OrderType;
-
-  [name: string]: any;
+  id: number;
+  house: HouseItem;
 }
 
 const Item: React.FC<IProps> = props => {
@@ -26,9 +27,27 @@ const Item: React.FC<IProps> = props => {
           </Button>
         );
       case 1:
-        return <Button size="small">已完成</Button>;
+        return (
+          <Button size="small" onClick={handleAchieve}>
+            已完成
+          </Button>
+        );
       default:
         break;
+    }
+  };
+
+  const handleAchieve = async () => {
+    const result = await http({
+      url: '/orders/achieve',
+      body: {
+        id: props.id,
+      },
+      method: 'post',
+    });
+    if (result) {
+      Toast.success('订单完成');
+      window.location.reload();
     }
   };
 
@@ -50,7 +69,7 @@ const Item: React.FC<IProps> = props => {
 
   return (
     <div className="order-item">
-      <img alt="order" src={props?.house?.imgs[0]?.url} />
+      <img alt="order" src={props?.house?.imgs[0].url} />
       <div className="center">
         <div className="title">{props?.house?.name}</div>
         <div className="price">￥{props?.house?.price}</div>

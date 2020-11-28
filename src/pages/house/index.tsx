@@ -20,11 +20,11 @@ import './index.less';
 
 const mapState = (state: RootState) => ({
   detail: state.house.detail,
+  order: state.order.order,
   comments: state.comment.comments,
   showLoading: state.comment.showLoading,
   reloadCommentsNum: state.comment.reloadCommentsNum,
   reset: state.comment.reset,
-  order: state.house.order,
 });
 
 const mapDispatch = (dispatch: Dispatch) => ({
@@ -34,11 +34,11 @@ const mapDispatch = (dispatch: Dispatch) => ({
   reloadComments: () => dispatch.comment.reloadComments(),
   resetData: (payload: object = {}) => dispatch.comment.resetData(payload),
   hasOrderAsync: (payload: object = {}) =>
-    dispatch.house.hasOrderAsync(payload),
+    dispatch.order.hasOrderAsync(payload),
   addOrderAsync: (payload: object = {}) =>
-    dispatch.house.addOrderAsync(payload),
+    dispatch.order.addOrderAsync(payload),
   delOrderAsync: (payload: object = {}) =>
-    dispatch.house.delOrderAsync(payload),
+    dispatch.order.delOrderAsync(payload),
 });
 
 type StateProps = ReturnType<typeof mapState>;
@@ -70,7 +70,7 @@ const House: React.FC<Props> = props => {
     props.getCommentsAsync({
       id: query?.id,
     });
-  }, [props.reloadCommentsNum]);
+  }, [props.reloadCommentsNum, props.reset]);
 
   useEffect(() => {
     props.hasOrderAsync({
@@ -78,16 +78,14 @@ const House: React.FC<Props> = props => {
     });
   }, [props.reloadCommentsNum]);
 
-  // 未加载完毕&loading未显示&已获取到评论信息
-  // 或需要重新render时执行
+  // 未加载完毕&第二次加载开始执行
   useObserverHook(
     '#' + CommonEnum.LOADING_ID,
     entries => {
       if (
-        (props.showLoading &&
-          entries[0]?.isIntersecting &&
-          props.comments.length) ||
-        props.reset
+        props.showLoading &&
+        entries[0]?.isIntersecting &&
+        props.comments.length
       ) {
         props.reloadComments();
       }
@@ -119,7 +117,7 @@ const House: React.FC<Props> = props => {
             style={{ marginBottom: 50 }}
           />
         ) : (
-          <div className={'end'}>无评论信息～</div>
+          <div className={'page-end'}>无评论信息～</div>
         )}
         <Footer />
       </div>

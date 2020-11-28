@@ -80,7 +80,7 @@ export const comment = createModel<RootModel>()({
   effects: dispatch => ({
     async getCommentsAsync(payload: object = {}, state) {
       try {
-        const comments: CommentProps[] = await http<CommentProps[]>({
+        const comments = await http<CommentProps[]>({
           url: '/comment/lists',
           body: {
             ...payload,
