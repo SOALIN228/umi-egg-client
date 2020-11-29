@@ -30,7 +30,7 @@ interface OrderState {
   order: OrderProps;
   orders: OrderItemProps[];
   page: CommonEnum.PageProps;
-  reloadCommentsNum: number;
+  reloadOrdersNum: number;
   showLoading: boolean;
 }
 
@@ -39,7 +39,7 @@ export const order = createModel<RootModel>()({
     order: {},
     orders: [] as OrderItemProps[],
     page: CommonEnum.PAGE,
-    reloadCommentsNum: 0,
+    reloadOrdersNum: 0,
     showLoading: true,
   } as OrderState,
   reducers: {
@@ -58,7 +58,7 @@ export const order = createModel<RootModel>()({
     reloadOrders(state, payload) {
       return {
         ...state,
-        reloadCommentsNum: state.reloadCommentsNum + 1,
+        reloadCommentsNum: state.reloadOrdersNum + 1,
         page: {
           ...state.page,
           pageNum: state.page.pageNum + 1,

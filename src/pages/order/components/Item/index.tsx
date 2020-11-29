@@ -69,7 +69,10 @@ const Item: React.FC<IProps> = props => {
 
   return (
     <div className="order-item">
-      <img alt="order" src={props?.house?.imgs[0].url} />
+      <img
+        alt="order"
+        src={props.house?.imgs ? props.house?.imgs[0]?.url : undefined}
+      />
       <div className="center">
         <div className="title">{props?.house?.name}</div>
         <div className="price">￥{props?.house?.price}</div>

@@ -18,7 +18,7 @@ import './index.less';
 const mapState = (state: RootState) => ({
   orders: state.order.orders,
   showLoading: state.order.showLoading,
-  reloadCommentsNum: state.order.reloadCommentsNum,
+  reloadOrdersNum: state.order.reloadOrdersNum,
 });
 
 const mapDispatch = (dispatch: Dispatch) => ({
@@ -62,7 +62,7 @@ const Order: React.FC<Props> = props => {
 
   useEffect(() => {
     props.getOrdersAsync({ type });
-  }, [type, props.reloadCommentsNum]);
+  }, [type, props.reloadOrdersNum]);
 
   useEffect(() => {
     return () => {

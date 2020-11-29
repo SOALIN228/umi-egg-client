@@ -11,7 +11,6 @@ import ShowLoading from '@/components/ShowLoading';
 import useHttpHook from '@/hooks/useHttpHook';
 import useObserverHook from '@/hooks/useObserverHook';
 import useImgHook from '@/hooks/useImgHook';
-import useCallbackState from '@/hooks/useStateCallback';
 import { CommonEnum } from '@/enums';
 import { useLocation } from 'umi';
 import './index.less';
@@ -27,9 +26,9 @@ interface HouseItem {
 const Search: React.FC<{}> = props => {
   const { query }: any = useLocation();
   const [houseName, setHouseName] = useState('');
-  const [houseLists, setHouseLists] = useCallbackState<HouseItem[]>([]);
+  const [houseLists, setHouseLists] = useState<HouseItem[]>([]);
   const [showLoading, setShowLoading] = useState(true);
-  const [showNext, setShowNext] = useState(false);
+  const [reloadHouseNum, setReloadHouseNum] = useState(0);
   const [houseSubmitName, setHouseSubmitName] = useState('');
   const [page, setPage] = useState(CommonEnum.PAGE);
   const [houses, loading] = useHttpHook<HouseItem[]>({
@@ -42,40 +41,32 @@ const Search: React.FC<{}> = props => {
       startTime: query?.startTime + ' 00:00:00',
       endTime: query?.endTime + ' 23:59:59',
     },
-    watch: [page.pageNum, houseSubmitName],
+    watch: [reloadHouseNum, houseSubmitName],
   });
+
   useObserverHook(
-    `#${CommonEnum.LOADING_ID}`,
-    (entries: IntersectionObserverEntry[]) => {
-      if (!loading && showNext !== entries[0].isIntersecting) {
-        setShowNext(entries[0].isIntersecting);
+    '#' + CommonEnum.LOADING_ID,
+    entries => {
+      if (showLoading && entries[0]?.isIntersecting && houseLists.length) {
+        setReloadHouseNum(reloadHouseNum + 1);
       }
     },
+    [houseLists.length, showLoading],
   );
-  useEffect(() => {
-    if (showNext) {
-      setPage({
-        ...page,
-        pageNum: page.pageNum + 1,
-      });
-    }
-  }, [showNext]);
+
   useImgHook('.item-img');
 
   useEffect(() => {
-    if (!loading && houses) {
-      if (houses.length) {
-        // 记录滚动位置
-        const currentScrollTop =
-          document.body.scrollTop + document.documentElement.scrollTop;
-        // 加载新数据后滚动到加载前的位置
-        setHouseLists([...houseLists, ...houses], () => {
-          scrollTo(0, currentScrollTop);
+    if (!loading) {
+      if (houses && houses.length) {
+        setHouseLists([...houseLists, ...houses]);
+        setPage({
+          ...page,
+          pageNum: page.pageNum + 1,
         });
-        if (houses.length < page.pageSize) {
-          setShowLoading(false);
-        }
+        setShowLoading(houses.length === page.pageSize);
       } else {
+        setHouseLists([]);
         setShowLoading(false);
       }
     }
@@ -84,15 +75,18 @@ const Search: React.FC<{}> = props => {
   const _handleSubmit = (value: string) => {
     setHouseName(value);
     setHouseSubmitName(value);
+    setReloadHouseNum(0);
+    setShowLoading(true);
     setPage(CommonEnum.PAGE);
-    setHouseLists([]);
   };
 
   const handleChange = (value: string) => {
     setHouseName(value);
   };
   const handleCancel = () => {
-    _handleSubmit('');
+    if (houseSubmitName !== '') {
+      _handleSubmit('');
+    }
   };
   const handleSubmit = (value: string) => {
     if (houseSubmitName !== value) {
@@ -119,7 +113,7 @@ const Search: React.FC<{}> = props => {
                   alt="img"
                   className="item-img"
                   src={require('../../assets/blank.png')}
-                  data-src={item.imgs ? item.imgs[0].url : undefined}
+                  data-src={item.imgs ? item.imgs[0]?.url : undefined}
                 />
                 <div className="item-right">
                   <div className="title">{item.name}</div>
@@ -127,7 +121,11 @@ const Search: React.FC<{}> = props => {
                 </div>
               </div>
             ))}
-            <ShowLoading showLoading={showLoading} />
+            {houseLists.length ? (
+              <ShowLoading showLoading={showLoading} />
+            ) : (
+              <div className={'page-end'}>无搜索信息～</div>
+            )}
           </div>
         )}
       </div>
