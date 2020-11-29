@@ -69,7 +69,7 @@ export const user = createModel<RootModel>()({
     },
   },
   effects: dispatch => ({
-    async getUserAsync(payload: object, state) {
+    async getUserAsync(payload, state) {
       try {
         const user: UserProps = await http<UserProps>({
           url: '/user/detail',
@@ -155,7 +155,7 @@ export const user = createModel<RootModel>()({
         if (result) {
           localStorage.clear();
           Toast.success('退出登录成功');
-          location.href = '/login?from=' + location.pathname;
+          location.href = '/login';
         }
       } catch (err) {
         console.log('err', err);
